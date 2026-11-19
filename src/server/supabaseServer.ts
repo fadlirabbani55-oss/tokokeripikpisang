@@ -1,5 +1,12 @@
 import { createClient } from '@supabase/supabase-js';
 
+const runtimeEnv: Record<string, string | undefined> =
+  (
+    globalThis as unknown as {
+      process?: { env?: Record<string, string | undefined> };
+    }
+  ).process?.env ?? {};
+
 /**
  * Konfigurasi Backend & Edge Function Handler menggunakan variabel environment @supabase/server:
  * - SUPABASE_URL
@@ -8,12 +15,12 @@ import { createClient } from '@supabase/supabase-js';
  * - SUPABASE_JWKS_URL
  */
 export const serverEnv = {
-  SUPABASE_URL: process.env.SUPABASE_URL || 'https://vltzvbcwhbdamixrlfwe.supabase.co',
+  SUPABASE_URL: runtimeEnv.SUPABASE_URL || 'https://vltzvbcwhbdamixrlfwe.supabase.co',
   SUPABASE_PUBLISHABLE_KEY:
-    process.env.SUPABASE_PUBLISHABLE_KEY || 'sb_publishable_1J23UKmozKZK4XYMcXfLzg_e0Uchf1D',
-  SUPABASE_SECRET_KEY: process.env.SUPABASE_SECRET_KEY || '',
+    runtimeEnv.SUPABASE_PUBLISHABLE_KEY || 'sb_publishable_1J23UKmozKZK4XYMcXfLzg_e0Uchf1D',
+  SUPABASE_SECRET_KEY: runtimeEnv.SUPABASE_SECRET_KEY || '',
   SUPABASE_JWKS_URL:
-    process.env.SUPABASE_JWKS_URL ||
+    runtimeEnv.SUPABASE_JWKS_URL ||
     'https://vltzvbcwhbdamixrlfwe.supabase.co/auth/v1/.well-known/jwks.json',
 };
 
